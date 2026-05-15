@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maktabim</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" type="image/svg+xml" href="https://img.icons8.com/color/96/school.png"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            color: #232946;
+            background: #f3f8ff;
+            position: relative;
+            z-index: 0;
+            overflow-x: hidden;
+        }
+
+        .svg-bg {
+            width: 100vw;
+            height: 390px;
+            position: absolute;
+            z-index: 0;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 6px 32px #aef4ff29;
+        }
+
+        .header-glass {
+            backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.86);
+            border-bottom: 1.8px solid #a8e5ff7e;
+            border-radius: 0 0 34px 34px;
+            max-width: 1222px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px 36px;
+            margin: 0;
+            justify-content: center;
+            padding: 14px 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.09em;
+            color: #3455a3;
+            border-radius: 18px;
+            padding: 8px 18px;
+            transition: background .17s, box-shadow .19s, color .16s;
+            box-shadow: 0px 1.3px 18px 0px #abcbff12;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav a:hover, nav a:active {
+            background: linear-gradient(90deg,#e9fcff 0%,#c1e5fc 100%);
+            color: #0e208e;
+            border-bottom: 2px solid #73fef0;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-left: auto;
+            margin-right: 20px;
+        }
+
+        .auth-btn {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .login-btn {
+            background: linear-gradient(90deg, #73fef0ee, #8ad0fff7);
+            color: #1b1760;
+        }
+
+        .signup-btn {
+            background: linear-gradient(90deg, #44fefd, #6699ff);
+            color: #11176a;
+            box-shadow: 0 4px 15px #63f8ff59;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 248, 255, 0.4);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+            margin-right: 20px;
+            color: #3455a3;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 15px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 1;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        /* Modal oynalar */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1.8px solid #d3e4f5b7;
+            animation: slideUp 0.4s ease;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #3455a3;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #ff6b6b;
+        }
+
+        .modal h2 {
+            text-align: center;
+            color: #2F2463;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .modal form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .modal label {
+            font-weight: 600;
+            color: #3455a3;
+            margin-bottom: 5px;
+        }
+
+        .modal input {
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1.5px solid #a6e8e0;
+            font-size: 1em;
+            background: #eafaffd2;
+            transition: all 0.3s;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .modal input:focus {
+            border-color: #44b7ff;
+            box-shadow: 0 0 0 3px rgba(68, 183, 255, 0.2);
+        }
+
+        .modal button[type="submit"] {
+            background: linear-gradient(90deg, #44fefd, #6699ff);
+            color: #11176a;
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .modal button[type="submit"]:hover {
+            background: linear-gradient(90deg, #57ffca, #573bff);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(87, 59, 255, 0.3);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .form-footer a {
+            color: #44b7ff;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Welcome hero block */
+        .hero-welcome {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 52px 22px 34px 22px;
+            margin-top: 44px;
+        }
+
+        .welcome-title {
+            font-size: 2.17em;
+            font-weight: 700;
+            background: linear-gradient(82deg,#7be4ef 30%,#5544ff 70%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 36px #6be7ff18;
+            margin-bottom: 10px;
+            letter-spacing: 2.3px;
+            animation: welcomeFadeIn 1.35s cubic-bezier(0.15,.22,.57,1.21) 1;
+            text-align: center;
+        }
+
+        @keyframes welcomeFadeIn {
+            0% {transform: translateY(-43px) scale(1.09); opacity: 0;}
+            95%{transform: translateY(6px) scale(0.98);}
+            100% {transform: translateY(0) scale(1); opacity: 1;}
+        }
+
+        .welcome-desc {
+            font-size: 1.18em;
+            color: #233367;
+            opacity: 0.85;
+            margin-bottom: 21px;
+            letter-spacing: 0.7px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .hero-img {
+            width: 132px;
+            margin-top: 7px;
+            filter: drop-shadow(0 10px 32px #b2e7ff88) drop-shadow(0 3px 7px #7be5ff21);
+            animation: floating 2.5s infinite ease-in-out alternate;
+        }
+
+        @keyframes floating {
+            from {transform: translateY(0px);}
+            to {transform: translateY(-13px);}
+        }
+
+        /* General glassmorphism and shadow for all sections */
+        .section.big-section {
+            margin: 51px auto;
+            max-width: 1100px;
+            padding: 40px 48px 41px 48px;
+            border-radius: 30px;
+        }
+
+        .section {
+            background: rgba(255,255,255,0.83);
+            border-radius: 22px;
+            box-shadow: 0 14px 44px 0 #99e4ff36,
+                        0 3.5px 12px #8339ff13,
+                        0 0.7px 2.2px #a2bcf633;
+            backdrop-filter: blur(12px);
+            border: 1.8px solid #d3e4f5b7;
+            margin-bottom: 22px;
+        }
+
+        .section h2 {
+            font-size: 2.04em;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 21px;
+            letter-spacing: 1.2px;
+            color: #2F2463;
+            text-shadow: 0 3px 22px #6ab3ff12;
+            text-align: center;
+        }
+
+        /* About block */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .school-3d {
+            width: 112px;
+            min-width: 80px;
+            filter: drop-shadow(0px 19px 52px #b1daffd8) drop-shadow(0px 2px 6px #aef2ff7a);
+            transform: rotateY(12deg) scale(1.08);
+            transition: transform .31s;
+        }
+
+        .school-3d:hover {
+            transform: rotateY(-8deg) scale(1.15);
+        }
+
+        /*** YANGILIKLAR ***/
+        .news-list {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .news-card {
+            flex: 1 1 250px;
+            min-width: 245px;
+            max-width: 330px;
+            background: linear-gradient(132deg,#dafeffcc 0,#edfffc70 100%);
+            border-radius: 18px;
+            border: 1.2px solid #b3ecff59;
+            box-shadow: 0 7px 23px #58edcd68, 0 1px 7px #9349ff11;
+            padding: 23px 18px 18px 18px;
+            position: relative;
+            margin-bottom: 7px;
+            transition: box-shadow .21s, border .19s, transform .19s;
+        }
+
+        .news-card:hover {
+            box-shadow: 0 13px 52px #19fff890, 0 5px 35px #a169ff18;
+            border: 1.7px solid #53aaffbb;
+            transform: scale(1.035) rotateZ(-2deg);
+        }
+
+        .news-badge {
+            position: absolute;
+            top: -17px;
+            left: 12px;
+            background: linear-gradient(90deg,#53f7cb,#8ffd7e);
+            border-radius: 18px;
+            color: #166b43;
+            font-weight: 700;
+            font-size: .98em;
+            padding: 2px 17px;
+            box-shadow: 0 2px 7px #55ecdd17;
+            z-index: 1;
+        }
+
+        .badge2 {
+            background: linear-gradient(90deg,#ffe085,#ffbb7b 100%);
+            color: #a86419;
+        }
+
+        .badge3 {
+            background: linear-gradient(90deg,#84cbff,#daa6ff);
+            color: #2d218b;
+        }
+
+        .news-card h3 {
+            font-size: 1.2em;
+            margin-top: 7px;
+            margin-bottom: 5px;
+        }
+
+        .news-card p  {
+            margin: 0 0 11px 0;
+            color: #135766;
+            line-height: 1.5;
+        }
+
+        .news-date {
+            font-size: 0.97em;
+            color: #9e79ff;
+            opacity: 0.68;
+        }
+
+        .schedule-table-wrap {
+            overflow-x: auto;
+            box-shadow: 0 4px 22px 0 #6beee87a inset;
+            border-radius: 12px;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.97);
+            font-size: 1.07em;
+            min-width: 600px;
+        }
+
+        .schedule-table th,
+        .schedule-table td {
+            border: 1px solid #98e2db76;
+            padding: 10px 14px;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        .schedule-table th {
+            background: linear-gradient(90deg,#a9f5ff,#cfffed 100%);
+            color: #292b65;
+            font-weight: 700;
+        }
+
+        /* Teachers 3D Card Styles */
+        .teachers-list-3d {
+            display: flex;
+            gap: 39px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .teacher-card-3d {
+            flex: 1 1 210px;
+            min-width: 180px;
+            max-width: 230px;
+            background: linear-gradient(120deg, #f6fafdca 0%, #e0f9ff30 100%);
+            padding: 32px 13px 22px 13px;
+            margin: 0 0 19px 0;
+            border-radius: 16px;
+            box-shadow: 0 8px 33px #93ecffea, 0 1px 3px #bfefff2a;
+            text-align: center;
+            border: 1.3px solid #d9f2fbaf;
+            transform: perspective(700px) rotateY(6deg) scale(0.995);
+            transition: box-shadow 0.23s cubic-bezier(.8,0,.21,1.5),
+                        border .19s,
+                        transform .17s cubic-bezier(0.6, -0.07, 0.72, 1.52);
+        }
+
+        .teacher-card-3d:hover {
+            box-shadow: 0 17px 77px #39e7ffd0, 0 4px 21px #da6ffb4a;
+            border: 1.8px solid #53ebfae7;
+            transform: perspective(800px) rotateY(-7deg) scale(1.058);
+            cursor: pointer;
+        }
+
+        .teacher-card-3d img {
+            width: 89px;
+            height: 89px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #9de2ff77;
+            margin-bottom: 11px;
+            box-shadow: 0 4px 15px #7bbcff71, 0 1px 3px #fff8;
+            background: #e1f4ff66;
+        }
+
+        .teacher-card-3d h3 {
+            font-size: 1.13em;
+            margin-bottom: 3px;
+        }
+
+        .teacher-card-3d p {
+            color: #214970;
+            opacity: 0.85;
+            margin-top: 0;
+        }
+
+        /* Events */
+        .event-list {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .event-card {
+            flex: 1 1 230px;
+            min-width: 220px;
+            max-width: 350px;
+            border-radius: 17px;
+            background: linear-gradient(110deg,#f5fffe, #d8edfe 100%);
+            box-shadow: 0 8px 28px #b5e1ff5c;
+            padding: 26px 16px 18px 18px;
+            margin-bottom: 6px;
+            position: relative;
+            border: 1.2px solid #b3ecff62;
+            transition: box-shadow .22s, border .17s, transform .18s;
+        }
+
+        .event-card:hover {
+            box-shadow: 0 13px 56px #7ee7ff88, 0 3px 16px #509dff12;
+            border: 1.8px solid #5edbfca7;
+            transform: scale(1.045) rotateZ(1deg);
+        }
+
+        .event-date {
+            position: absolute;
+            right: 17px;
+            top: 18px;
+            background: linear-gradient(90deg,#e6fffc,#b8e3ff 100%);
+            border-radius: 11px;
+            color: #2e7374;
+            font-weight: 600;
+            font-size: .98em;
+            padding: 2px 14px;
+            box-shadow: 0 1px 4px #a4f4e617;
+        }
+
+        /* Graduates */
+        .graduates-list {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .graduate-card {
+            background: linear-gradient(99deg,#fffcf6b7,#e0f7ffbc 100%);
+            border-radius: 18px;
+            box-shadow: 0 7px 23px #e0f2d668, 0 2px 8px #b4f5ff38;
+            border: 1.2px solid #b3ecff30;
+            padding: 13px 30px 13px 14px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            min-width: 270px;
+            max-width: 340px;
+            transition: box-shadow .22s, border .18s, transform .17s;
+            flex: 1 1 300px;
+        }
+
+        .graduate-card:hover {
+            box-shadow: 0 12px 35px #a2fbe588, 0 5px 16px #a5eafc17;
+            border: 1.7px solid #53aaffc9;
+            transform: scale(1.04);
+        }
+
+        .graduate-card img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2.2px solid #ffd67a9f;
+            box-shadow: 0 2px 6px #e7ffda80;
+            background: #fffde6;
+        }
+
+        .graduate-card h3 {
+            margin: 0 0 4px 0;
+            font-size: 1.05em;
+        }
+
+        .graduate-card span {
+            color: #398542;
+            font-size: 0.97em;
+        }
+
+        /* Galereya */
+        .gallery-3d {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 23px;
+        }
+
+        .gallery-img-3d {
+            background: linear-gradient(120deg,#fffbc286 0%,#e6f6ff85 100%);
+            border-radius: 17px;
+            overflow: hidden;
+            box-shadow: 0 13px 38px #abe7ff84, 0 1.5px 8px #c6d8ff27;
+            transition: box-shadow .22s, transform .16s;
+            position: relative;
+            perspective: 600px;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-img-3d img, .gallery-video {
+            display: block;
+            width: 100%;
+            min-height: 144px;
+            aspect-ratio: 2/1.3;
+            object-fit: cover;
+            border-radius: 14px;
+            transform: scale(1.00) rotateZ(0deg);
+            transition: transform .34s cubic-bezier(0.44,1.25,0.53,1.02);
+        }
+
+        .gallery-img-3d:hover {
+            box-shadow: 0 26px 60px #38e4ff85, 0 10px 45px #f4eec4;
+            transform: scale(1.035) rotateY(7deg);
+        }
+
+        .gallery-img-3d:hover img, .gallery-img-3d:hover .gallery-video {
+            transform: scale(1.09) rotateZ(1.4deg);
+        }
+
+        /* FAQ */
+        .faq-list {
+            margin: 7px 0 0 0;
+        }
+
+        .faq-item {
+            margin-bottom: 18px;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: linear-gradient(90deg,#e3fffa 0,#ecedfa 100%);
+            border: none;
+            color: #2e429d;
+            font-size: 1.13em;
+            font-weight: 600;
+            border-radius: 15px;
+            padding: 14px 19px;
+            margin-bottom: 4px;
+            box-shadow: 0 2px 13px #8af9fc18;
+            cursor: pointer;
+            text-align: left;
+            transition: background .19s, color .13s;
+        }
+
+        .faq-question.active, .faq-question:hover {
+            background: linear-gradient(90deg,#73fef0ee 0,#8ad0fff7 100%);
+            color: #1b1760;
+        }
+
+        .faq-answer {
+            display:none;
+            background: #eafcffd7;
+            border-radius: 12px;
+            padding: 10px 17px;
+            color: #19636a;
+            box-shadow: 0 1.7px 7px #e9fffd33;
+            margin-left: 7px;
+            margin-bottom: 8px;
+        }
+
+        .faq-answer.show {
+            display: block;
+            animation: fadeInFaq .36s;
+        }
+
+        @keyframes fadeInFaq {
+            0% {opacity:0; transform:translateY(-6px);}
+            100%{opacity:1; transform:translateY(0);}
+        }
+
+        /* Contact */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 380px;
+            margin: 0 auto 10px;
+            width: 100%;
+        }
+
+        label {
+            font-weight: 600;
+        }
+
+        input, textarea {
+            padding: 13px 15px;
+            border-radius: 8px;
+            border: 1.3px solid #a6e8e0;
+            font-size: 1.08em;
+            margin-top: 3px;
+            background: #eafaffd2;
+            box-shadow: 0 3px 16px #bbefe933;
+            outline: none;
+            transition: border .17s, box-shadow .14s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus {
+            border: 1.8px solid #44b7ff;
+            box-shadow: 0 6px 30px #7cf9ff82;
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(90deg,#44fefd,#6699ff 100%);
+            color: #11176a;
+            border: none;
+            padding: 13px 0;
+            border-radius: 30px;
+            font-size: 1.13em;
+            font-weight: bold;
+            box-shadow: 0 7px 18px #63f8ff59, 0 2px 4px #fafeffb6;
+            cursor: pointer;
+            transition: background .17s, box-shadow .19s, color .13s;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background: linear-gradient(90deg, #57ffca 0%, #573bff 100%);
+            color: #fff;
+            box-shadow: 0 12px 34px #573bff9a, 0 6px 26px #79fff787;
+        }
+
+        #thankYouMsg {
+            font-weight: 600;
+            font-size: 1.13em;
+            color: #fff;
+            background: linear-gradient(90deg,#43efef,#40afd2 100%);
+            padding: 12px 24px;
+            border-radius: 18px;
+            box-shadow: 0 1px 9px #53ede744;
+            display: inline-block;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        /* Footer glass and social */
+        .footer-glass {
+            background: rgba(250,250,255,0.89);
+            box-shadow: 0 2px 44px #80b0ff10 inset, 0 2px 2px #ddeafc10;
+            padding: 27px 0 15px 0;
+            text-align: center;
+            font-size: 1.11em;
+            color: #1b1e60;
+            border-radius: 0 0 24px 24px;
+            margin-top: 64px;
+            max-width: 1222px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-social {
+            margin-bottom: 12px;
+        }
+
+        .footer-social a {
+            margin: 0 10px;
+            display: inline-block;
+            transition: transform .19s;
+        }
+
+        .footer-social a:hover {
+            transform: scale(1.18) rotateZ(8deg);
+        }
+
+        /* RESPONSIVE DESIGN TIZIMI */
+
+        /* Katta ekranlar (1200px va undan katta) */
+        @media (max-width: 1200px) {
+            .header-glass {
+                max-width: 90%;
+                margin: 0 auto;
+            }
+
+            .section.big-section {
+                max-width: 90%;
+                padding: 40px 30px;
+            }
+
+            .footer-glass {
+                max-width: 90%;
+                margin: 64px auto 0;
+            }
+
+            main {
+                max-width: 95%;
+                padding: 0 15px;
+            }
+        }
+
+
+
+
+        /* Mobil qurilmalar (576px va undan kichik) */
+        @media (max-width: 576px) {
+            .svg-bg {
+                height: 150px;
+            }
+
+            .header-glass {
+                border-radius: 0 0 20px 20px;
+            }
+
+            .hero-welcome {
+                padding: 25px 5px 15px 5px;
+                margin-top: 15px;
+            }
+
+            .welcome-title {
+                font-size: 1.4em;
+                letter-spacing: 0.5px;
+            }
+
+            .welcome-desc {
+                font-size: 0.95em;
+                line-height: 1.4;
+            }
+
+            .hero-img {
+                width: 80px;
+            }
+
+            .section.big-section {
+                padding: 25px 15px;
+                margin: 25px auto;
+                border-radius: 20px;
+            }
+
+            .section h2 {
+                font-size: 1.4em;
+                margin-bottom: 12px;
+            }
+
+            .news-card, .event-card {
+                padding: 20px 15px 15px 15px;
+            }
+
+            .news-badge, .event-date {
+                font-size: 0.9em;
+                padding: 2px 12px;
+            }
+
+            .teachers-list-3d {
+                gap: 15px;
+            }
+
+            .teacher-card-3d {
+                flex: 1 1 140px;
+                min-width: 130px;
+                max-width: 150px;
+                padding: 15px 8px 12px 8px;
+            }
+
+            .teacher-card-3d img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .teacher-card-3d h3 {
+                font-size: 1em;
+            }
+
+            .teacher-card-3d p {
+                font-size: 0.9em;
+            }
+
+            .graduates-list {
+                gap: 15px;
+            }
+
+            .graduate-card {
+                padding: 12px 15px;
+                gap: 12px;
+            }
+
+            .graduate-card img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .graduate-card h3 {
+                font-size: 1em;
+            }
+
+            .graduate-card span {
+                font-size: 0.85em;
+            }
+
+            .faq-question {
+                font-size: 1em;
+                padding: 12px 15px;
+            }
+
+            .faq-answer {
+                padding: 8px 12px;
+                font-size: 0.95em;
+            }
+
+            .footer-glass {
+                padding: 20px 0 10px 0;
+                margin-top: 40px;
+                font-size: 1em;
+            }
+
+            .footer-social a img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .modal-content {
+                padding: 25px 15px;
+                margin: 15% auto;
+                border-radius: 20px;
+            }
+
+            .modal h2 {
+                font-size: 1.6em;
+                margin-bottom: 20px;
+            }
+
+            .modal input {
+                padding: 12px 15px;
+            }
+
+            form {
+                max-width: 100%;
+            }
+        }
+
+
+/* Forma maydonlari uchun yangi stillar */
+.form-field {
+    margin-bottom: 20px;
+}
+
+.form-field label {
+    display: block;
+    font-weight: 600;
+    color: #3455a3;
+    margin-bottom: 8px;
+    font-size: 1.05em;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input-wrapper input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 15px;
+    border: 1.5px solid #a6e8e0;
+    border-radius: 8px;
+    font-size: 1em;
+    background: #eafaffd2;
+    outline: none;
+    transition: all 0.3s;
+}
+
+.input-wrapper input:focus {
+    border-color: #44b7ff;
+    box-shadow: 0 0 0 3px rgba(68, 183, 255, 0.2);
+}
+
+.field-description {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 0.9em;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 0 5px;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.input-wrapper input:focus + .field-description {
+    color: #44b7ff;
+    background: rgba(68, 183, 255, 0.1);
+}
+
+
+/* Yatay holat uchun */
+@media (max-height: 600px) and (orientation: landscape) {
+    .form-field {
+        margin-bottom: 8px;
+    }
+
+    .input-wrapper input {
+        padding: 6px 10px;
+    }
+
+    .field-description {
+        font-size: 0.8em;
+    }
+}
+/* NOTEBOOK EKRANLARI UCHUN (768px - 1199px) */
+@media (min-width: 768px) and (max-width: 1199px) {
+    /* Modalni notebook uchun optimallashtirish */
+    #signupModal .modal-content {
+        max-width: 550px;
+        margin: 8% auto;
+        padding: 35px;
+        border-radius: 22px;
+    }
+
+    /* Formani notebook o'lchamiga moslash */
+    #signupForm {
+        max-width: 100%;
+        margin: 0;
+    }
+
+    /* Ism va familiya ikki ustunli, lekin kamroq joy */
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 18px;
+    }
+
+    /* Form maydonlari */
+    .form-field {
+        margin-bottom: 18px;
+    }
+
+    /* Label va hint text */
+    .form-label {
+        margin-bottom: 6px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .label-text {
+        font-size: 1em;
+        font-weight: 600;
+        color: #2F2463;
+        margin-right: 8px;
+    }
+
+    .hint-text {
+        font-size: 0.85em;
+        color: #777;
+        font-weight: 400;
+        opacity: 0.8;
+    }
+
+    /* Input maydonlari notebook uchun */
+    #signupForm input {
+        padding: 12px 14px;
+        font-size: 1em;
+        border: 1.8px solid #a6e8e0;
+        border-radius: 9px;
+        background: rgba(255, 255, 255, 0.95);
+        transition: all 0.25s ease;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    #signupForm input:focus {
+        border-color: #44b7ff;
+        box-shadow:
+            0 0 0 3px rgba(68, 183, 255, 0.2),
+            0 5px 15px rgba(68, 183, 255, 0.15);
+        transform: translateY(-1px);
+        background: white;
+    }
+
+    #signupForm input:hover {
+        border-color: #73fef0;
+        box-shadow: 0 4px 12px rgba(115, 254, 240, 0.2);
+    }
+
+    /* Tugma notebook uchun */
+    #signupForm button[type="submit"] {
+        padding: 14px;
+        font-size: 1.15em;
+        border-radius: 10px;
+        margin-top: 18px;
+        background: linear-gradient(90deg, #44fefd, #6699ff);
+        border: none;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        box-shadow: 0 6px 20px rgba(102, 153, 255, 0.25);
+    }
+
+    #signupForm button[type="submit"]:hover {
+        background: linear-gradient(90deg, #57ffca, #573bff);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(87, 59, 255, 0.35);
+    }
+
+    #signupForm button[type="submit"]:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 15px rgba(87, 59, 255, 0.25);
+    }
+
+    /* Modal sarlavhasi */
+    #signupModal h2 {
+        font-size: 1.9em;
+        margin-bottom: 25px;
+        color: #2F2463;
+        text-align: center;
+        letter-spacing: 0.8px;
+        background: linear-gradient(82deg, #7be4ef 30%, #5544ff 70%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        text-shadow: 0 4px 30px #6be7ff18;
+    }
+
+    /* Close tugmasi */
+    #signupModal .close {
+        font-size: 28px;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.25s;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    #signupModal .close:hover {
+        background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+        color: white;
+        transform: rotate(90deg);
+        box-shadow: 0 5px 18px rgba(255, 107, 107, 0.35);
+    }
+
+    /* Form footer */
+    .form-footer {
+        font-size: 1em;
+        margin-top: 18px;
+        text-align: center;
+    }
+
+    .form-footer a {
+        color: #44b7ff;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.25s;
+        padding: 4px 8px;
+        border-radius: 5px;
+        display: inline-block;
+        margin-left: 5px;
+    }
+
+    .form-footer a:hover {
+        background: linear-gradient(90deg, rgba(68, 183, 255, 0.1), rgba(116, 254, 240, 0.1));
+        color: #2F2463;
+        text-decoration: underline;
+    }
+
+    /* Xabarlar */
+    #signupMessage {
+        font-size: 1em;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-top: 18px;
+        font-weight: 600;
+    }
+}
+
+/* 13-15 DYUM NOTEBOOKLAR UCHUN (1024px - 1199px) */
+@media (min-width: 1024px) and (max-width: 1199px) {
+    #signupModal .modal-content {
+        max-width: 580px;
+        margin: 6% auto;
+        padding: 40px;
+    }
+
+    .form-row {
+        gap: 18px;
+        margin-bottom: 20px;
+    }
+
+    .form-field {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        margin-bottom: 7px;
+    }
+
+    .label-text {
+        font-size: 1.03em;
+    }
+
+    .hint-text {
+        font-size: 0.88em;
+    }
+
+    #signupForm input {
+        padding: 13px 15px;
+        font-size: 1.03em;
+        border-radius: 10px;
+    }
+
+    #signupForm button[type="submit"] {
+        padding: 15px;
+        font-size: 1.18em;
+        border-radius: 11px;
+        margin-top: 20px;
+    }
+
+    #signupModal h2 {
+        font-size: 2em;
+        margin-bottom: 28px;
+    }
+}
+
+/* KICHIK NOTEBOOKLAR (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    #signupModal .modal-content {
+        max-width: 500px;
+        margin: 10% auto;
+        padding: 30px;
+        border-radius: 20px;
+    }
+
+    .form-row {
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .form-field {
+        margin-bottom: 16px;
+    }
+
+    /* Kichik notebooklarda hint textni o'chiramiz */
+    .hint-text {
+        display: none;
+    }
+
+    .label-text {
+        font-size: 0.95em;
+        width: 100%;
+        margin-bottom: 4px;
+    }
+
+    #signupForm input {
+        padding: 11px 13px;
+        font-size: 0.98em;
+        border-radius: 8px;
+    }
+
+    #signupForm input::placeholder {
+        font-size: 0.88em;
+    }
+
+    #signupForm button[type="submit"] {
+        padding: 13px;
+        font-size: 1.1em;
+        border-radius: 9px;
+        margin-top: 16px;
+        box-shadow: 0 5px 18px rgba(102, 153, 255, 0.2);
+    }
+
+    #signupForm button[type="submit"]:hover {
+        box-shadow: 0 10px 25px rgba(87, 59, 255, 0.3);
+    }
+
+    #signupModal h2 {
+        font-size: 1.8em;
+        margin-bottom: 22px;
+    }
+
+    .form-footer {
+        font-size: 0.95em;
+        margin-top: 16px;
+    }
+}
+
+/* NOTEBOOKLARDA MODAL FONI */
+@media (min-width: 768px) and (max-width: 1199px) {
+    #signupModal {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+    }
+
+    #signupModal .modal-content {
+        background: rgba(255, 255, 255, 0.96);
+        border: 1.5px solid rgba(163, 232, 224, 0.25);
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.2),
+            0 8px 35px rgba(102, 153, 255, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        animation: modalSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    }
+
+    @keyframes modalSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+/* NOTEBOOKLARDA FORM ELEMENTLARI HOVER EFFEKT */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .form-field {
+        position: relative;
+    }
+
+    .form-field:hover .label-text {
+        color: #44b7ff;
+        transition: color 0.2s;
+    }
+
+    /* Input ichida ko'rsatkich (focus holatida) */
+    #signupForm input:focus {
+        outline: none;
+        border-width: 2px;
+    }
+
+    /* Validation holatlari uchun ranglar */
+    #signupForm input:valid:not(:placeholder-shown) {
+        border-color: #73fef0;
+        background: rgba(115, 254, 240, 0.05);
+    }
+
+    #signupForm input:invalid:not(:placeholder-shown) {
+        border-color: #ff6b6b;
+        background: rgba(255, 107, 107, 0.05);
+    }
+
+    /* Parol kuchini ko'rsatish */
+    #signupPassword:focus + .password-strength {
+        display: block;
+    }
+}
+
+/* NOTEBOOK TOUCHPAD UCHUN OPTIMALLASHTIRISH */
+@media (min-width: 768px) and (max-width: 1199px) {
+    /* Tugmalar va inputlar uchun minimal touch target */
+    #signupForm input,
+    #signupForm button[type="submit"],
+    #signupModal .close,
+    .form-footer a {
+        min-height: 44px;
+    }
+
+    /* Tugma hover effektini yumshatish (touch uchun) */
+    #signupForm button[type="submit"]:hover {
+        transform: translateY(-1px);
+    }
+
+    /* Input hover effektini yumshatish */
+    #signupForm input:hover {
+        transform: none;
+    }
+}
+
+/* 2-IN-1 NOTEBOOK/TABLET MODE UCHUN (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    /* Tablet mode da modalni biroz pastroq qilish */
+    #signupModal .modal-content {
+        margin: 12% auto;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    /* Scroll bar */
+    #signupModal .modal-content::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #signupModal .modal-content::-webkit-scrollbar-track {
+        background: rgba(234, 250, 255, 0.6);
+        border-radius: 8px;
+    }
+
+    #signupModal .modal-content::-webkit-scrollbar-thumb {
+        background: linear-gradient(90deg, #73fef0, #8ad0ff);
+        border-radius: 8px;
+    }
+
+    /* Form elementlarini biroz kichikroq qilish */
+    #signupForm input {
+        padding: 10px 12px;
+    }
+
+    #signupForm button[type="submit"] {
+        padding: 12px;
+    }
+
+    /* Yumshoq shadow effekt */
+    #signupModal .modal-content {
+        box-shadow:
+            0 15px 50px rgba(0, 0, 0, 0.15),
+            0 6px 25px rgba(102, 153, 255, 0.1);
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- SVG Parallax Gradient Background -->
+    <div class="svg-bg">
+        <svg width="100%" height="100%" viewBox="0 0 1200 400" class="svg-bg-top">
+            <ellipse cx="600" cy="180" rx="670" ry="170" fill="url(#gradient1)" opacity="0.37"/>
+            <ellipse cx="400" cy="20" rx="220" ry="90" fill="url(#gradient2)" opacity="0.22"/>
+        </svg>
+    </div>
+
+    <header class="header-glass sticky-nav">
+        <nav style="display: flex; align-items: center; justify-content: space-between; padding: 0 20px;">
+            <ul style="flex: 1; justify-content: flex-start;">
+                <li><a href="#welcome">Bosh sahifa</a></li>
+                <li><a href="#about">Maktab haqida</a></li>
+                <li><a href="#news">Yangiliklar</a></li>
+                <li><a href="#schedule">Dars jadvali</a></li>
+                <li><a href="#teachers">O'qituvchilar</a></li>
+            </ul>
+            <div id="authButtons" class="auth-buttons">
+                <button class="auth-btn login-btn" onclick="openModal('loginModal')">Kirish</button>
+                <button class="auth-btn signup-btn" onclick="openModal('signupModal')">Ro'yxatdan o'tish</button>
+            </div>
+            <div id="userInfo" class="user-info" style="display: none;">
+                <span id="userName">Foydalanuvchi</span>
+                <button class="logout-btn" onclick="logout()">Chiqish</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Kirish</h2>
+            <form id="loginForm">
+                <label>Email yoki telefon raqam:
+                    <input type="text" id="loginIdentifier" required>
+                </label>
+                <label>Parol:
+                    <input type="password" id="loginPassword" required>
+                </label>
+                <button type="submit">Kirish</button>
+            </form>
+            <div class="form-footer">
+                Hisobingiz yo'qmi? <a onclick="switchToSignup()">Ro'yxatdan o'ting</a>
+            </div>
+            <div id="loginMessage" style="margin-top: 15px; text-align: center; display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+<div id="signupModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('signupModal')">&times;</span>
+        <h2>Ro'yxatdan o'tish</h2>
+        <form id="signupForm">
+            <!-- Ism qatori -->
+            <div class="form-field">
+                <label for="signupName">Ism:</label>
+                <div class="input-wrapper">
+                    <input type="text" id="signupName" required placeholder="Ismingiz">
+                </div>
+            </div>
+
+            <!-- Familiya qatori -->
+            <div class="form-field">
+                <label for="signupLastName">Familiya:</label>
+                <div class="input-wrapper">
+                    <input type="text" id="signupLastName" required placeholder="Familiyangiz">
+                </div>
+            </div>
+
+
+            <!-- Email -->
+            <div class="form-field">
+                <label for="signupEmail">Email:</label>
+                <div class="input-wrapper">
+                    <input type="email" id="signupEmail" required placeholder="example@mail.com">
+                </div>
+            </div>
+
+            <!-- Parol -->
+            <div class="form-field">
+                <label for="signupPassword">Parol (kamida 6 ta belgi):</label>
+                <div class="input-wrapper">
+                    <input type="password" id="signupPassword" minlength="6" required placeholder="Parol">
+                </div>
+            </div>
+
+            <!-- Parolni tasdiqlash -->
+            <div class="form-field">
+                <label for="signupConfirmPassword">Parolni tasdiqlang:</label>
+                <div class="input-wrapper">
+                    <input type="password" id="signupConfirmPassword" minlength="6" required placeholder="Parolni takrorlang">
+                </div>
+            </div>
+
+            <button type="submit">Ro'yxatdan o'tish</button>
+        </form>
+        <div class="form-footer">
+            Hisobingiz bormi? <a onclick="switchToLogin()">Kirish</a>
+        </div>
+        <div id="signupMessage" style="margin-top: 15px; text-align: center; display: none;"></div>
+    </div>
+</div>
+
+    <main>
+        <!-- Welcome block with animation -->
+        <section id="welcome" class="section glassmorphism hero-welcome big-section">
+            <h1 class="welcome-title anim-welcome">Maktabimga Xush Kelibsiz!</h1>
+            <p class="welcome-desc">
+                Bilim, rivojlanish va do'stlik maskaniga sayohat qiling. <br>
+                O'z orzularingiz sari biz bilan birga odimlang!
+            </p>
+            <img class="hero-img" src="https://img.icons8.com/color/288/school-building.png" alt="School">
+        </section>
+
+        <section id="about" class="section glassmorphism big-section">
+            <h2>Maktab haqida</h2>
+            <div class="about-content">
+                <img class="school-3d" src="https://img.icons8.com/clouds/160/school.png" alt="School icon">
+                <p>
+                    Bizning maktabimiz - bilim va tarbiya maskani.
+                    Issiq muhit, kuchli zamonaviy o'qituvchilar, keng imkoniyatlar va birgalikda yangi yutuqlarga! <br>
+                    Hozirda 1000 dan ortiq o'quvchi, 60 tajribali ustoz - bilim sari bir yo'lda!
+                </p>
+            </div>
+        </section>
+
+        <!-- Yangiliklar -->
+        <section id="news" class="section glassmorphism big-section news-section">
+            <h2>Yangiliklar</h2>
+            <div class="news-list">
+                <div class="news-card">
+                    <span class="news-badge">Yangi</span>
+                    <h3>"STEAM haftaligi" boshlandi!</h3>
+                    <p>Haftalik doirasida robototexnika va informatika bo'yicha master-klasslar bo'lib o'tmoqda.</p>
+                    <span class="news-date">5 noyabr, 2025</span>
+                </div>
+                <div class="news-card">
+                    <span class="news-badge badge2">E'lon</span>
+                    <h3>Ingliz tili olimpiadasi natijalari</h3>
+                    <p>O'quvchilarimiz shahardagi eng ilg'or natijalarni ko'rsatdi. 9 ta medal!</p>
+                    <span class="news-date">2 noyabr, 2025</span>
+                </div>
+                <div class="news-card">
+                    <span class="news-badge badge3">Tadbir</span>
+                    <h3>Kitobxonlik tanlovi yakunlandi</h3>
+                    <p>Qo'shilgan o'quvchilarga, sovg'alar va sertifikatlar topshirildi.</p>
+                    <span class="news-date">31 oktyabr, 2025</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Jadval -->
+        <section id="schedule" class="section glassmorphism big-section">
+            <h2>Dars jadvali</h2>
+            <div class="schedule-table-wrap">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Dushanba</th>
+                            <th>Seshanba</th>
+                            <th>Chorshanba</th>
+                            <th>Payshanba</th>
+                            <th>Juma</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Ingliz tili</td>
+                            <td>Algebra</td>
+                            <td>Huquq</td>
+                            <td>Kimyo</td>
+                            <td>Fizika</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Ona tili</td>
+                            <td>Tarix</td>
+                            <td>nemis tili</td>
+                            <td>Biologiya</td>
+                            <td>Geografiya</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Tarix</td>
+                            <td>Kimyo</td>
+                            <td>Rus tili</td>
+                            <td>Geometriya</td>
+                            <td>Informatika</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Algebra</td>
+                            <td>Huquq</td>
+                            <td>Ingliz tili</td>
+                            <td>Fizika</td>
+                            <td>Kimyo</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Fizika</td>
+                            <td>Ona tili</td>
+                            <td>Kimyo</td>
+                            <td>Tarix</td>
+                            <td>Geometriya</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Ingliz tili</td>
+                            <td>Fizika</td>
+                            <td>Biologiya</td>
+                            <td>Huquq</td>
+                            <td>Algebra</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- O'qituvchilar -->
+        <section id="teachers" class="section glassmorphism big-section">
+            <h2>O'qituvchilar</h2>
+            <div class="teachers-list-3d">
+                <div class="teacher-card-3d">
+                    <img src="https://img.freepik.com/free-photo/lifestyle-beauty-fashion-people-emotions-concept-young-asian-female-office-manager-ceo-with-pleased-expression-standing-white-background-smiling-with-arms-crossed-chest_1258-59329.jpg?semt=ais_hybrid&w=740&q=80" alt="O'qituvchi">
+                    <h3>Maftuna</h3>
+                    <p>Matematika</p>
+                </div>
+                <div class="teacher-card-3d">
+                    <img src="https://static.vecteezy.com/system/resources/thumbnails/042/822/498/small/a-young-professional-person-wearing-suit-lawyer-ceo-png.png" alt="O'qituvchi">
+                    <h3>Mansurbek</h3>
+                    <p>Informatika</p>
+                </div>
+                <div class="teacher-card-3d">
+                    <img src="https://st.depositphotos.com/2309453/3449/i/450/depositphotos_34490345-stock-photo-confident-casual-unshaven-young-man.jpg" alt="O'qituvchi">
+                    <h3>Shoxrux</h3>
+                    <p>Tarix</p>
+                </div>
+                <div class="teacher-card-3d">
+                    <img src="https://cdn-01.cms-ap-v2i.applyflow.com/pinnacle-people/wp-content/uploads/2023/09/slide-2.png" alt="O'qituvchi">
+                    <h3>Murodbek</h3>
+                    <p>Ingliz tili</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tadbirlar -->
+        <section id="events" class="section glassmorphism big-section">
+            <h2>Tadbirlar</h2>
+            <div class="event-list">
+                <div class="event-card">
+                    <span class="event-date">07.11.2026</span>
+                    <h3>Ochiq eshiklar kuni</h3>
+                    <p>Yangi o'quvchilar va ota-onalar uchun maktab bilan tanishuv dasturi.</p>
+                </div>
+                <div class="event-card">
+                    <span class="event-date">21.11.2026</span>
+                    <h3>"Young Innovators" forumi</h3>
+                    <p>Talabalar ishtirokida ilmiy loyihalar va master-klass sahnalari.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bitiruvchilar -->
+        <section id="graduates" class="section glassmorphism big-section">
+            <h2>Faxrli bitiruvchilarimiz</h2>
+            <div class="graduates-list">
+                <div class="graduate-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWAf8JLG1qzpUF1vbxLQsOyiNrITS644npx92Sz4GBWeZS4nvSx7YnSxU3qtRUQpz1E1g&usqp=CAU" alt="Graduates">
+                    <div>
+                        <h3>Matniyozov Mansurbek</h3>
+                        <span>WIUT grant sohibi</span>
+                    </div>
+                </div>
+                <div class="graduate-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCleH_l5BbFBsNQvITkz1AScQj1pHQBgo0gVdx7_kNu_S0DOy4reA71oJ3mQ-y6uCqcoE&usqp=CAU" alt="Graduates">
+                    <div>
+                        <h3>Rozmetova Maftuna</h3>
+                        <span>O'zbekiston matematika olimpiada g'olibi</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Galereya (surat va video) -->
+        <section id="gallery" class="section glassmorphism big-section">
+            <h2>Galereya</h2>
+            <div class="gallery-3d">
+                <div class="gallery-img-3d"><img src="image-2.jpg" alt="School photo 1"></div>
+                <div class="gallery-img-3d"><img src="image.jpg" alt="School photo 2"></div>
+                <div class="gallery-img-3d"><img src="image-0.jpg" alt="School photo 2"></div>
+                <div class="gallery-img-3d"><img src="image-1.avif" alt="School photo 2"></div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="section glassmorphism big-section">
+            <h2>Ko'p beriladigan savollar (FAQ)</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">Maktabga qabul qachon?</button>
+                    <div class="faq-answer">Qabul muddati har yili may-avgust oylarida ochiladi.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Sinflar soni qancha?</button>
+                    <div class="faq-answer">1-11 sinf gacha 27 ta sinf faoliyat yuritadi.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">O'qish bepulmi?</button>
+                    <div class="faq-answer">Davlat maktabi - o'qish bepul.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kontakt -->
+        <section id="contact" class="section glassmorphism big-section">
+            <h2>Aloqa</h2>
+            <form id="contactForm">
+                <label>Ismingiz:
+                    <input type="text" name="name" required>
+                </label>
+                <label>Email:
+                    <input type="email" name="email" required>
+                </label>
+                <label>Xabar:
+                    <textarea name="message" required></textarea>
+                </label>
+                <button type="submit">Jo'natish</button>
+            </form>
+            <div id="thankYouMsg" style="display:none;">Xabaringiz yuborildi!</div>
+        </section>
+    </main>
+
+    <footer class="footer-glass">
+        <div class="footer-social">
+            <a href="https://t.me/matniyozovv_m" target="_blank" title="Telegram"><img src="https://img.icons8.com/color/48/telegram-app--v1.png" alt="Telegram"></a>
+            <a href="https://www.instagram.com/l7.matniyozovv/" target="_blank" title="Instagram"><img src="https://img.icons8.com/color/48/instagram-new--v1.png" alt="Instagram"></a>
+            <a href="#" title="YouTube"><img src="https://img.icons8.com/color/48/youtube-play.png" alt="YouTube"></a>
+        </div>
+        <p>&copy; 2026 <b>"Maktabim"</b>. Barcha huquqlar himoyalangan.</p>
+    </footer>
+
+    <script>
+        // Auth modal functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'block';
+                setTimeout(() => modal.style.opacity = '1', 10);
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.opacity = '0';
+                setTimeout(() => modal.style.display = 'none', 300);
+                // Clear messages
+                document.getElementById(modalId.replace('Modal', 'Message')).style.display = 'none';
+                // Clear forms
+                document.getElementById(modalId.replace('Modal', 'Form')).reset();
+            }
+        }
+
+        function switchToSignup() {
+            closeModal('loginModal');
+            setTimeout(() => openModal('signupModal'), 300);
+        }
+
+        function switchToLogin() {
+            closeModal('signupModal');
+            setTimeout(() => openModal('loginModal'), 300);
+        }
+
+        // Handle login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const identifier = document.getElementById('loginIdentifier').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const messageBox = document.getElementById('loginMessage');
+
+            // Mock authentication (in real app, this would be a server call)
+            if ((identifier.includes('@') || identifier.includes('+')) && password.length >= 6) {
+                showLoginSuccess('Mansurbek');
+                closeModal('loginModal');
+            } else {
+                showMessage(messageBox, 'Email/telefon yoki parol noto\'g\'ri!', 'error');
+            }
+        });
+
+        // Handle signup
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value.trim();
+            const lastName = document.getElementById('signupLastName').value.trim();
+            const phone = document.getElementById('signupPhone').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const messageBox = document.getElementById('signupMessage');
+
+            // Validate password
+            if (password !== confirmPassword) {
+                showMessage(messageBox, 'Parollar mos kelmaydi!', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage(messageBox, 'Parol kamida 6 ta belgidan iborat bo\'lishi kerak!', 'error');
+                return;
+            }
+
+            // Mock registration
+            showMessage(messageBox, 'Ro\'yxatdan muvaffaqiyatli o\'tildi!', 'success');
+            setTimeout(() => {
+                closeModal('signupModal');
+                showLoginSuccess(name);
+            }, 2000);
+        });
+
+        // Show login success
+        function showLoginSuccess(userName) {
+            document.getElementById('authButtons').style.display = 'none';
+            document.getElementById('userInfo').style.display = 'flex';
+            document.getElementById('userName').textContent = userName;
+
+            // Show welcome notification
+            const welcomeMsg = document.createElement('div');
+            welcomeMsg.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(90deg, #57ffca, #573bff);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 8px 25px rgba(87, 59, 255, 0.3);
+                z-index: 1000;
+                animation: slideIn 0.5s ease;
+            `;
+            welcomeMsg.textContent = `Xush kelibsiz, ${userName}!`;
+            document.body.appendChild(welcomeMsg);
+
+            setTimeout(() => {
+                welcomeMsg.style.animation = 'slideOut 0.5s ease';
+                setTimeout(() => welcomeMsg.remove(), 500);
+            }, 3000);
+        }
+
+        // Logout function
+        function logout() {
+            document.getElementById('authButtons').style.display = 'flex';
+            document.getElementById('userInfo').style.display = 'none';
+
+            // Show logout notification
+            const logoutMsg = document.createElement('div');
+            logoutMsg.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+                z-index: 1000;
+                animation: slideIn 0.5s ease;
+            `;
+            logoutMsg.textContent = 'Tizimdan chiqdingiz!';
+            document.body.appendChild(logoutMsg);
+
+            setTimeout(() => {
+                logoutMsg.style.animation = 'slideOut 0.5s ease';
+                setTimeout(() => logoutMsg.remove(), 500);
+            }, 3000);
+        }
+
+        // Show message function
+        function showMessage(element, text, type) {
+            element.textContent = text;
+            element.style.display = 'block';
+            element.style.color = type === 'error' ? '#ff6b6b' : '#57ffca';
+            element.style.padding = '10px';
+            element.style.borderRadius = '5px';
+            element.style.backgroundColor = type === 'error' ? '#ffe6e6' : '#e6fff5';
+
+            setTimeout(() => {
+                element.style.opacity = '0';
+                setTimeout(() => element.style.display = 'none', 300);
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.opacity = '0';
+                setTimeout(() => event.target.style.display = 'none', 300);
+            }
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Contact form
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('contactForm').reset();
+            const box = document.getElementById('thankYouMsg');
+            box.style.display = 'inline-block';
+            box.style.opacity = '0';
+            setTimeout(() => box.style.opacity = '1', 50);
+            setTimeout(() => { box.style.opacity = '0'; }, 2100);
+            setTimeout(() => { box.style.display = 'none'; }, 2600);
+        });
+
+        // FAQ
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', function(){
+                const ans = this.nextElementSibling;
+                if(ans.classList.contains('show')){
+                    ans.classList.remove('show');
+                    this.classList.remove('active');
+                } else {
+                    document.querySelectorAll('.faq-answer').forEach(a=>a.classList.remove('show'));
+                    document.querySelectorAll('.faq-question').forEach(q=>q.classList.remove('active'));
+                    ans.classList.add('show');
+                    this.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
